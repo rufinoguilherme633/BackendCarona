@@ -1,6 +1,7 @@
 -- Criação do Banco de Dados
 CREATE DATABASE backendFateCarona;
-USE  backendFateCarona;
+USE backendFateCarona;
+
 create table estados(
    `id_estado` BIGINT NOT NULL,
   `nome` varchar(75) DEFAULT NULL,
@@ -5810,6 +5811,7 @@ CREATE TABLE veiculos (
     placa VARCHAR(20) UNIQUE NOT NULL,
     cor VARCHAR(30),
     ano INT CHECK (ano >= 1900),
+	vagas_disponiveis INT NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 );
 
@@ -6015,7 +6017,47 @@ d.id_destino, d.logradouro as "destino logradouro" , d.numero as "destino numero
 
  
  DESCRIBE status_carona;
+ 
 
- 
- 
+
+-- Inserir motorista (usuário com id = 1)
+INSERT INTO usuarios (id_usuario, nome, sobrenome, email, senha, telefone, foto, id_tipo_usuario, id_genero, id_curso)
+VALUES (1, 'João', 'Silva', 'joao.silva@example.com', 'senha123', '11999999999', null, 2, 1, 1);
+
+
+
+-- Inserir veículo com id = 1, ligado ao usuário de id = 1
+INSERT INTO veiculos (id_veiculo, id_usuario, modelo, marca, placa, cor, ano, vagas_disponiveis)
+VALUES (1, 1, 'Civic', 'Honda', 'ABC1234', 'Preto', 2020,2);
+
+-- Inserir origem com id = 1
+INSERT INTO origens (id_origem, id_cidade, logradouro, numero, bairro, cep, latitude, longitude)
+VALUES (1, 100, 'Rua da FATEC', '100', 'Jardim Sandra', '06716-000', -23.6021, -46.9197);
+
+-- Inserir destino com id = 1
+INSERT INTO destinos (id_destino, id_cidade, logradouro, numero, bairro, cep, latitude, longitude)
+VALUES (1, 200, 'Av. Principal', '200', 'Centro', '06700-000', -23.6032, -46.9201);
+
+-- Inserir carona com id = 1
+INSERT INTO caronas (id_carona, id_motorista, id_origem, id_destino, data_hora, vagas_disponiveis, id_status_carona, id_veiculo)
+VALUES (1, 1, 1, 1, '2025-06-04 08:00:00', 3, 1, 1);
+
+
+ -- Usuários deletados
+ SELECT * FROM usuarios;
+SELECT * FROM usuarios_deletados;
+
+-- Veículos deletados
+SELECT * FROM veiculos;
+
+SELECT * FROM veiculos_deletados;
+
+-- Caronas deletadas
+SELECT * FROM caronas;
+SELECT * FROM caronas_deletados;
+
+#delete from usuarios where id_usuario =1;
+
+ delete from usuarios where id_usuario = 1;
+ select * from solicitacoes;
  

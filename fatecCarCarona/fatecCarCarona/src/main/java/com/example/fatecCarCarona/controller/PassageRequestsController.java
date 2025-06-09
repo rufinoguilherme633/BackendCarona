@@ -1,0 +1,58 @@
+package com.example.fatecCarCarona.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.service.annotation.PutExchange;
+
+import com.example.fatecCarCarona.dto.NearbyDriversDTO;
+import com.example.fatecCarCarona.dto.PassageRequestsDTO;
+import com.example.fatecCarCarona.dto.PassengerSearchRequest;
+import com.example.fatecCarCarona.service.PassageRequestsService;
+import com.example.fatecCarCarona.service.TokenService;
+
+
+
+@RestController
+@RequestMapping("/solicitacao")
+public class PassageRequestsController {
+	@Autowired
+	PassageRequestsService passageRequestsService;
+	@Autowired
+	private  TokenService tokenService;
+	@GetMapping("/proximos")
+	public ResponseEntity<List<NearbyDriversDTO>> findNearbyDrivers(@RequestBody PassengerSearchRequest passengerSearchRequest) throws Exception{
+		List<NearbyDriversDTO> motoristaProximos = passageRequestsService.findNearbyDrivers(passengerSearchRequest);
+		
+		return new ResponseEntity<List<NearbyDriversDTO>>(motoristaProximos,HttpStatus.OK);
+	
+	}
+	
+	@PostMapping
+	public ResponseEntity<PassageRequestsDTO> create(@RequestHeader("Authorization") String authHeader,@RequestBody PassageRequestsDTO passageRequests) throws Exception {
+		Long idLong = tokenService.extractUserIdFromHeader(authHeader);
+		PassageRequestsDTO passageRequestsDTO = passageRequestsService.create(passageRequests, idLong);
+		return ResponseEntity.ok(passageRequestsDTO);
+	}
+	
+	
+	@PutExchange("cancelar/{id_solicitacao}")
+    public ResponseEntity<String> cancel(@RequestHeader("Authorization") String authHeader, @PathVariable Long id_solicitacao) {
+
+    		Long idLong = tokenService.extractUserIdFromHeader(authHeader);
+
+            passageRequestsService.cancelar(idLong, id_solicitacao);
+            return ResponseEntity.ok("Solicitação cancelada com sucesso.");
+
+    }
+
+}

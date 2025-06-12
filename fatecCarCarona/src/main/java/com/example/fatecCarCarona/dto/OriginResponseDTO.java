@@ -6,5 +6,5 @@ public record OriginResponseDTO(
 	    String logradouro,
 	    String numero,
 	    String bairro,
-	    String cep		
+	    String cep
 ){}

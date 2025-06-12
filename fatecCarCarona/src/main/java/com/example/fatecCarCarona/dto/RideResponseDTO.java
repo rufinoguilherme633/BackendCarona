@@ -10,7 +10,7 @@ public record RideResponseDTO(
 		Integer vagas_disponiveis,
 		LocalDateTime data_hora,
 		String status
-		
+
 ) {
 
 }

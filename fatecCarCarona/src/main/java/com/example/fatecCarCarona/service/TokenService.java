@@ -22,7 +22,7 @@ public class TokenService {
 	public String generateToken(User user) {
 		try {
 			Algorithm algorithm = Algorithm.HMAC256(secret);
-			
+
 			String token = JWT.create()
 					.withIssuer("fatecCarCarona")
 					.withSubject(user.getId().toString())
@@ -33,7 +33,7 @@ public class TokenService {
 			 throw new RuntimeException("Error while authentication");
 		}
 	}
-	
+
 	public String validateToken(String token) {
 		try {
 			Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -49,10 +49,10 @@ public class TokenService {
 	private Instant generateExpirationDate() {
 		return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
 	}
-	
-	
+
+
 	public Long extractUserIdFromHeader(String authHeader) {
-		
+
 		String token = authHeader.replace("Bearer ","");
 		String userId = this.validateToken(token);
 
@@ -62,8 +62,8 @@ public class TokenService {
 		} catch (Exception e) {
 	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid user ID format", e);
 		}
-		
-		
-		
+
+
+
 	}
 }

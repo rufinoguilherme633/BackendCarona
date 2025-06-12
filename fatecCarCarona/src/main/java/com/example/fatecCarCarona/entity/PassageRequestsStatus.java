@@ -12,18 +12,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name ="status_carona")
+@Table(name ="status_solicitacao")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RideStatus {
-
+public class PassageRequestsStatus {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id_status_carona")
+	@Column(name="id_status_solicitacao")
 	Long id;
 	@Column(name ="status_nome")
 	String nome;
-
 }

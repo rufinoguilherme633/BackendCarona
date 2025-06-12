@@ -7,5 +7,5 @@ public record DestinationResponseDTO(
 	    String numero,
 	    String bairro,
 	    String cep
-		
+
 ){}

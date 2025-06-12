@@ -1,8 +1,4 @@
 package com.example.fatecCarCarona.service;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -10,11 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.example.fatecCarCarona.dto.DestinationDTO;
 import com.example.fatecCarCarona.dto.DestinationResponseDTO;
@@ -25,7 +20,6 @@ import com.example.fatecCarCarona.dto.RideDTO;
 import com.example.fatecCarCarona.dto.RideResponseDTO;
 import com.example.fatecCarCarona.dto.VehicleResponseDTO;
 import com.example.fatecCarCarona.dto.ViaCepDTO;
-import com.example.fatecCarCarona.entity.CaronaDetalhadaProjection;
 import com.example.fatecCarCarona.entity.City;
 import com.example.fatecCarCarona.entity.Destination;
 import com.example.fatecCarCarona.entity.Origin;
@@ -33,11 +27,11 @@ import com.example.fatecCarCarona.entity.Ride;
 import com.example.fatecCarCarona.entity.RideStatus;
 import com.example.fatecCarCarona.entity.User;
 import com.example.fatecCarCarona.entity.Vehicle;
+import com.example.fatecCarCarona.exception.RideException;
 import com.example.fatecCarCarona.repository.RideRepository;
 import com.example.fatecCarCarona.repository.RideStatusRepository;
 import com.example.fatecCarCarona.repository.UserRepository;
 import com.example.fatecCarCarona.repository.VehicleRepository;
-import com.example.fatecCarCarona.exception.RideException;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -61,15 +55,15 @@ public class RideService {
 
 	private void validateAddress(String cep, String cidade, String logradouro, String bairro) {
 		Optional<ViaCepDTO> viaCepDTO = viaCepService.buscarCep(cep);
-		
+
 		if (viaCepDTO.isEmpty()) {
 			throw new RideException("CEP não encontrado: " + cep);
 		}
-		
+
 		boolean isValid = viaCepDTO.get().localidade().equals(cidade) &&
 						 viaCepDTO.get().logradouro().equals(logradouro) &&
 						 viaCepDTO.get().bairro().equals(bairro);
-		
+
 		if (!isValid) {
 			throw new RideException("Endereço não corresponde ao CEP informado");
 		}
@@ -78,11 +72,11 @@ public class RideService {
 	private Optional<OpenstreetmapDTO> buscarLocalizacao(String endereco) {
 		String enderecoEncoded = URLEncoder.encode(endereco, StandardCharsets.UTF_8);
 		Optional<OpenstreetmapDTO> resultado = openstreetmapService.buscarLocal(enderecoEncoded);
-		
+
 		if (resultado.isEmpty()) {
 			throw new RideException("Endereço não encontrado no OpenStreetMap: " + endereco);
 		}
-		
+
 		return resultado;
 	}
 
@@ -118,19 +112,19 @@ public class RideService {
 	}
 
 	@Transactional
-	public RideDTO criarCarona(Long motoristaid, RideDTO dto) {
+	public RideDTO criarCarona(Long motoristaid, RideDTO dto) throws Exception {
 		User motorista = userRepository.findById(motoristaid)
 			.orElseThrow(() -> new RideException("Motorista não encontrado"));
-		
+
 		validarMotoristaDisponivel(motoristaid);
 		vehicleService.validateUserIsVehicleOwner(motoristaid, dto.id_veiculo());
-		
+
 		Vehicle veiculo = vehicleRepository.findById(dto.id_veiculo())
 			.orElseThrow(() -> new RideException("Veículo não encontrado"));
 
-		validateAddress(dto.originDTO().cep(), dto.originDTO().cidade(), 
+		validateAddress(dto.originDTO().cep(), dto.originDTO().cidade(),
 					   dto.originDTO().logradouro(), dto.originDTO().bairro());
-		validateAddress(dto.destinationDTO().cep(), dto.destinationDTO().cidade(), 
+		validateAddress(dto.destinationDTO().cep(), dto.destinationDTO().cidade(),
 					   dto.destinationDTO().logradouro(), dto.destinationDTO().bairro());
 
 		City cidadeOrigem = cityService.validateCity(dto.originDTO().cidade());
@@ -162,64 +156,64 @@ public class RideService {
 	}
 
 	public boolean validateCep(String cep, String cidade, String logradouro, String bairro) throws Exception {
-		
+
 			Optional<ViaCepDTO> viaCepDTO = viaCepService.buscarCep(cep);
-			
+
 			if(viaCepDTO.isEmpty()) {
 		        throw new IllegalArgumentException("CEP destino não encontrado.");
 
-			}	
-			Boolean isValid = 
+			}
+			boolean isValid =
 					viaCepDTO.get().localidade().equals(cidade) &&
 					viaCepDTO.get().logradouro().equals(logradouro) &&
 					viaCepDTO.get().bairro().equals(bairro) ;
-			
+
 			if(!isValid) {
 		        throw new IllegalArgumentException("Endereço não corresponde ao CEP.");
 
 			}
 			return true;
 	}
-	
+
 
 	public Optional<OpenstreetmapDTO> queryOpenStreetMapByAddress(String local) {
 		return openstreetmapService.buscarLocal(local);
 
 	}
-	
-	
+
+
 	public Ride createRide(Ride ride) {
 		return rideRepository.save(ride);
 	}
-	
-	
+
+
 	public Origin convertDtoInOrigin(OriginDTO originDTO, City city, String latitude, String longitude) {
 		Origin origin = new Origin();
-		origin.setCity(city); 
+		origin.setCity(city);
 		origin.setLogradouro(originDTO.logradouro());
 		origin.setNumero(originDTO.numero());
 		origin.setBairro(originDTO.bairro());
 		origin.setCep(originDTO.cep());
 		origin.setLatitude(Double.parseDouble(latitude));
 		origin.setLongitude(Double.parseDouble(longitude));
-		
+
 		return origin;
 	}
-	
+
 	public Destination convertDtoInDestination(DestinationDTO destinationDTO, City city, String latitude, String longitude) {
 		Destination destination = new Destination();
-		destination.setCity(city); 
+		destination.setCity(city);
 		destination.setLogradouro(destinationDTO.logradouro());
 		destination.setNumero(destinationDTO.numero());
 		destination.setBairro(destinationDTO.bairro());
 		destination.setCep(destinationDTO.cep());
 		destination.setLatitude(Double.parseDouble(latitude));
 		destination.setLongitude(Double.parseDouble(longitude));
-		
+
 		return destination;
 	}
-	
-	
+
+
 	public RideDTO convertToRideDTO(Ride ride) {
 	    OriginDTO originDTO = new OriginDTO(
 	        ride.getOrigin().getCity().getNome(),
@@ -244,88 +238,92 @@ public class RideService {
 	        ride.getVehicle().getId()
 	    );
 	}
-	@Transactional(rollbackOn = Exception.class)	
+	@Transactional(rollbackOn = Exception.class)
 
 	public RideDTO PostRide(Long idLong, RideDTO dto) throws Exception {
 		User user = userRepository.findById(idLong).orElseThrow(() -> new RuntimeException("usuario não encontrado"));
 		List<Ride>  existsDriverActives= rideRepository.findAtivasByDriverId(idLong);
-		
+
 		if(!existsDriverActives.isEmpty()) {
 			throw new Exception("Já tem uma corrida ativa, termine a corrida atual ou cancele pra poder criar mais corridas");
 		}
-		
+
 		vehicleService.validateUserIsVehicleOwner(idLong, dto.id_veiculo());
-		
+
 		Vehicle vehicle = vehicleRepository.findById(dto.id_veiculo())
 			    .orElseThrow(() -> new RuntimeException("Carro não encontrado"));
-		
+
+		if (dto.vagas_disponiveis() <= 0 || dto.vagas_disponiveis() > vehicle.getAvailableSeats()) {
+		    throw new IllegalArgumentException("A quantidade de vagas deve ser maior que 0 e menor ou igual à quantidade de assentos disponíveis no veículo escolhido" + vehicle.getAvailableSeats() );
+		}
+
 	    validateCep(dto.destinationDTO().cep(), dto.destinationDTO().cidade(), dto.destinationDTO().logradouro(), dto.destinationDTO().bairro());
 	    validateCep(dto.originDTO().cep(), dto.originDTO().cidade(), dto.originDTO().logradouro(), dto.originDTO().bairro());
 
-	    
-	    
+
+
 
 		City cityOrigin = cityService.validateCity(dto.originDTO().cidade());
 		City cityDestination = cityService.validateCity(dto.destinationDTO().cidade());
-	    
+
 	    String localStringOrigin =
 	    	    dto.originDTO().logradouro() + " " +
 	    	    cityOrigin.getNome();
 
-	    
+
 	    String localEncodedOrigin = URLEncoder.encode(localStringOrigin, StandardCharsets.UTF_8);
 	    System.out.println(localEncodedOrigin);
-	    
-	    
+
+
 	    String localStringDestination =
 	    	    dto.destinationDTO().logradouro() + " " +
 	    	    cityDestination.getNome();
 
 	    String localEncodedDestination = URLEncoder.encode(localStringDestination, StandardCharsets.UTF_8);
-	    
-	    
+
+
 		Optional<OpenstreetmapDTO> resultadoOrigem = queryOpenStreetMapByAddress(localStringOrigin);
 	    if (resultadoOrigem.isEmpty()) {
 	        throw new RuntimeException("Erro ao buscar endereço: Endereco não encontrado");
 	    }
-	    
+
 		Optional<OpenstreetmapDTO> resultadoDestination = queryOpenStreetMapByAddress(localStringDestination);
-	    
+
 		if (resultadoDestination.isEmpty()) {
 	        throw new RuntimeException("Erro ao buscar endereço: Endereco não encontrado");
 	    }
-		
-		
+
+
 		Origin origin = convertDtoInOrigin(dto.originDTO(),cityOrigin,resultadoOrigem.get().lat(),resultadoOrigem.get().lon());
-		 
+
 		Destination destination = convertDtoInDestination(dto.destinationDTO(),cityDestination,resultadoDestination.get().lat(),resultadoDestination.get().lon());
 
 		Origin origemSaved =  originService.createOrigin(origin);
 		Destination destinationSaved = destinationService.createDestination(destination);
-		
-		
+
+
 		Ride ride = new Ride();
 		ride.setDriver(user);
-		ride.setOrigin(origin);;
+		ride.setOrigin(origin);
 		ride.setDestination(destination);
 		ride.setDateTime(LocalDateTime.now());
 		ride.setAvailableSeats(dto.vagas_disponiveis());
 		ride.setStatus(rideStatusService.gellByName("ativa"));
 		ride.setVehicle(vehicle);
 
-		
+
 		Ride createdRide = createRide(ride);
-		
-		
+
+
 		return convertToRideDTO(createdRide);
 	}
 
 
 	public List<RideResponseDTO> findAtivasByDriverId(Long idLong) {
 		  List<Ride> ridesAtivas = rideRepository.findAtivasByDriverId(idLong);
-		    
+
 		    List<RideResponseDTO> rideResponseList = new ArrayList<>();
-		    
+
 		    for (Ride ride : ridesAtivas) {
 		        OriginResponseDTO originDTO = new OriginResponseDTO(
 		        	ride.getOrigin().getId(),
@@ -351,7 +349,8 @@ public class RideService {
 		            ride.getVehicle().getMarca(),
 		            ride.getVehicle().getPlaca(),
 		            ride.getVehicle().getCor(),
-		            ride.getVehicle().getAno()
+		            ride.getVehicle().getAno(),
+		            ride.getAvailableSeats()
 		        );
 
 		        RideResponseDTO rideResponse = new RideResponseDTO(
@@ -366,20 +365,20 @@ public class RideService {
 
 		        rideResponseList.add(rideResponse);
 		    }
-		    
+
 		    return rideResponseList;
 	}
-	
-	
+
+
 	public Page<RideResponseDTO> findConcluidasyDriverId(Long idLong, int pagina, int itens) throws Exception {
 
 		Page<Ride> findConcluidasyDriverId = rideRepository.findConcluidasyDriverId(idLong, PageRequest.of(pagina, itens));
 		List<RideResponseDTO> rideResponses = new ArrayList<>();
-		
+
 		if(findConcluidasyDriverId.isEmpty()) {
 			throw new Exception("Não há nenhuma corrida concluida");
 		}
-		
+
 		for (Ride ride : findConcluidasyDriverId.getContent()) {
 	        // Converte Origin para OriginResponseDTO
 	        OriginResponseDTO originDTO = new OriginResponseDTO(
@@ -408,7 +407,8 @@ public class RideService {
 	            ride.getVehicle().getMarca(),
 	            ride.getVehicle().getPlaca(),
 	            ride.getVehicle().getCor(),
-	            ride.getVehicle().getAno()
+	            ride.getVehicle().getAno(),
+	            ride.getAvailableSeats()
 	        );
 
 	        // Cria RideResponse
@@ -422,7 +422,7 @@ public class RideService {
 	            ride.getStatus().getNome()
 	        );
 
-	        
+
 	        // Adiciona à lista
 	        rideResponses.add(rideResponse);
 	    }
@@ -430,31 +430,31 @@ public class RideService {
 
 	    return new PageImpl<>(rideResponses, findConcluidasyDriverId.getPageable(), findConcluidasyDriverId.getTotalElements());
 	}
-	
-	
+
+
 	public void cancelRideByDriver(Long driverId, Long rideId) {
 	    User user = userRepository.findById(driverId)
 	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-	    
+
 	    Ride ride = rideRepository.findById(rideId)
 	        .orElseThrow(() -> new RuntimeException("Carona não encontrada"));
-	    
+
 	    if (ride.getStatus().getNome().equalsIgnoreCase("cancelada") ||
 	        ride.getStatus().getNome().equalsIgnoreCase("concluída")) {
 	        throw new IllegalStateException("Caronas já concluídas ou canceladas não podem ser alteradas.");
 	    }
-	    
+
 	    if (!ride.getDriver().getId().equals(user.getId())) {
 	        throw new SecurityException("Esta carona não pertence a este motorista.");
 	    }
 
 	    RideStatus rideStatus = rideStatusRepository.findByNome("cancelada");
 	    ride.setStatus(rideStatus);
-	    
+
 	    rideRepository.save(ride);
 	}
-	
-	
+
+
 	public RideDTO atualizarDriverRotas(Long driverId, RideDTO rideDTO, Long rideId) throws Exception {
 	    User user = userRepository.findById(driverId)
 	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
@@ -468,6 +468,10 @@ public class RideService {
 	    if (!vehicle.getUser().getId().equals(user.getId())) {
 	        throw new SecurityException("Este carro não pertence a este motorista.");
 	    }
+
+		if (rideDTO.vagas_disponiveis() <= 0 || rideDTO.vagas_disponiveis() > vehicle.getAvailableSeats()) {
+		    throw new IllegalArgumentException("A quantidade de vagas deve ser maior que 0 e menor ou igual à quantidade de assentos disponíveis no veículo escolhido" + vehicle.getAvailableSeats() );
+		}
 
 	    if (ride.getStatus().getNome().equalsIgnoreCase("cancelada") ||
 	        ride.getStatus().getNome().equalsIgnoreCase("concluída")) {
@@ -519,12 +523,12 @@ public class RideService {
 
 	    ride.setAvailableSeats(rideDTO.vagas_disponiveis());
 
-	   
+
 	    ride.setVehicle(vehicle); // Associar o novo veículo, se necessário
 	    rideRepository.save(ride);
 
 	    RideDTO response = new RideDTO(
-	       
+
 	        new OriginDTO(
 	            origem.getLogradouro(),
 	            origem.getNumero(),

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.fatecCarCarona.dto.GenderDTO;
-import com.example.fatecCarCarona.entity.Course;
 import com.example.fatecCarCarona.entity.Gender;
 import com.example.fatecCarCarona.repository.GenderRepository;
 
@@ -15,7 +14,7 @@ import com.example.fatecCarCarona.repository.GenderRepository;
 public class GenderService {
 	@Autowired
 	GenderRepository genderRepository;
-	
+
 	public Gender validateGender(long id) {
 		return genderRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Tipo de sexo não cadastrado"));

@@ -8,10 +8,10 @@ import com.example.fatecCarCarona.repository.RideStatusRepository;
 
 @Service
 public class RideStatusService {
-	
+
 	@Autowired
 	RideStatusRepository rideStatusRepository;
-	
+
 	public RideStatus gellByName(String nome) {
 		return rideStatusRepository.findByNome(nome);
 	}

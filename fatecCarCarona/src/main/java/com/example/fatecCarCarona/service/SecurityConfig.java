@@ -20,10 +20,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 	@Autowired
 	CustomUserDetailsService userDetailsService;
-	
+
 	@Autowired
 	SecurityFilter securityFilter;
-	
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
@@ -49,8 +49,8 @@ public class SecurityConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
-	
+
+
 	@Bean
 	public AuthenticationManager authenticationMenager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();

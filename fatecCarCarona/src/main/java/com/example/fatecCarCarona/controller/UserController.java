@@ -29,7 +29,7 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
@@ -37,8 +37,8 @@ public class UserController {
 	@Autowired
 	private  TokenService tokenService;
 	@PostMapping("/criarMotorista")
-	
-	
+
+
 	public ResponseEntity<UserDriverDTO> createDriver(@RequestBody UserDriverDTO userDriverDTO) throws Exception{
 		UserDriverDTO driver = userService.cadastrarDrivers(userDriverDTO);
 		return new ResponseEntity<>(driver,HttpStatus.CREATED);
@@ -55,34 +55,34 @@ public class UserController {
 			String token = tokenService.generateToken(user);
 			return ResponseEntity.ok(new LoginReposnseDTO(user.getNome(), token));
 		}
-		
+
 		return ResponseEntity.badRequest().build();
 	}
-	
+
 	@PutMapping
 	public ResponseEntity<UserBaseDTO> putCarByDriver(@RequestHeader("Authorization") String authHeader, @RequestBody UserBaseDTO userBaseDTO) throws Exception {
 		Long idLong = tokenService.extractUserIdFromHeader(authHeader);
 		UserBaseDTO user = userService.putCarByDriver(idLong, userBaseDTO);
 		return  ResponseEntity.ok(user);
-		
+
 	}
-	
+
 	@DeleteMapping
 	public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String authHeader) throws Exception{
-		
+
 		Long inLong = tokenService.extractUserIdFromHeader(authHeader);
 		userService.deleteUser(inLong);
 		return ResponseEntity.ok("Usuario deletado com sucesso");
-		
+
 	}
 	@GetMapping
 	public ResponseEntity<UserBaseDTO> getUser(@RequestHeader("Authorization") String authHeader) throws Exception{
-		
+
 		Long idLong = tokenService.extractUserIdFromHeader(authHeader);
 		UserBaseDTO userBaseDTO = userService.getUser(idLong);
-		
-		
+
+
 		return ResponseEntity.ok(userBaseDTO);
-		
+
 	}
 }

@@ -22,7 +22,7 @@ public class CourseController {
 	public ResponseEntity<List<CourseDTO> > allCourses(){
 		List<CourseDTO> allCourses = courseService.allCourses();
 		return ResponseEntity.ok(allCourses);
-		
+
 	}
 
 }

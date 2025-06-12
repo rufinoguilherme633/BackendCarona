@@ -14,14 +14,14 @@ import com.example.fatecCarCarona.service.UserTypeService;
 @RestController
 @RequestMapping("/userType")
 public class UserTypeController {
-	
+
 	@Autowired
 	UserTypeService userTypeService;
-	
+
 	@GetMapping
 	public ResponseEntity<List<UserTypeDTO>> alluserType(){
 		List<UserTypeDTO> allUserType = userTypeService.allUserType();
-		
+
 		return ResponseEntity.ok(allUserType);
 	}
 

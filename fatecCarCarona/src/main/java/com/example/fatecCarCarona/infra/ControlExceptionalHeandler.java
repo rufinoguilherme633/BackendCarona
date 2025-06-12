@@ -9,7 +9,7 @@ import com.example.fatecCarCarona.dto.ExceptionalDTO;
 @ControllerAdvice
 public class ControlExceptionalHeandler {
 
-		
+
 		@ExceptionHandler(Exception.class)
 		public ResponseEntity theatGeneralExceptional(Exception exception) {
 			ExceptionalDTO exceptionalDTO = new ExceptionalDTO(exception.getMessage(), "500");

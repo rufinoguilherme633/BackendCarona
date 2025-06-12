@@ -5,6 +5,6 @@ public record VehicleDTO(
 	     String marca,
 	     String placa,
 	     String cor,
-	     Integer ano
+	     Integer ano,
+	     Integer vagas_disponiveis
  ) {}
-	

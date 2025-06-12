@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.fatecCarCarona.dto.CityDTO;
 import com.example.fatecCarCarona.entity.City;
-import com.example.fatecCarCarona.entity.Course;
 import com.example.fatecCarCarona.entity.State;
 import com.example.fatecCarCarona.repository.CityRepository;
 
@@ -19,7 +18,7 @@ public class CityService {
 	CityRepository cityRepository;
 	@Autowired
 	StateService stateService;
-	
+
 	public City validateCity(long id) {
 		return cityRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Cidade não cadastrada no nosso sistema"));
@@ -33,7 +32,7 @@ public class CityService {
 		public List<CityDTO> allCitiessByStateId(Long stateId) throws Exception{
 			Optional<State> stateExists = stateService.validateStateExists(stateId);
 			List<City> allCities = cityRepository.findByStateId(stateExists.get().getId());
-			
+
 			if(allCities.isEmpty()) {
 				throw new Exception("Não ha cidades cadastradas");
 			}

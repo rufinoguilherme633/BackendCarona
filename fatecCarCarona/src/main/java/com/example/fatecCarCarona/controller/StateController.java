@@ -19,20 +19,20 @@ import com.example.fatecCarCarona.service.StateService;
 public class StateController {
 	@Autowired
 	StateService stateService;
-	
+
 	@GetMapping
 	public ResponseEntity<List<StateDTO>> getAll(){
 		List<StateDTO> getAll = stateService.getAll();
 		return ResponseEntity.ok(getAll);
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<State> get(@PathVariable("id") Long id) throws Exception{
 		Optional<State> optionalState = stateService.get(id);
 		return optionalState.map(ResponseEntity::ok)
 		                    .orElseGet(() -> ResponseEntity.notFound().build());
 	}
-	
-	
+
+
 }
 

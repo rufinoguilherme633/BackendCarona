@@ -8,15 +8,10 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.fatecCarCarona.dto.OpenstreetmapDTO;
-import com.example.fatecCarCarona.dto.ViaCepDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import reactor.core.publisher.Mono;
 
 @Service
 public class OpenstreetmapService {

@@ -24,15 +24,17 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_veiculo")
     private Long id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="id_usuario")
 	private User user;
-	
+
 	private String  modelo;
 	private String  marca;
 	private String  placa;
 	private String  cor;
 	private Integer ano;
-		
+    @Column(name = "vagas_disponiveis", nullable = false)
+    private int availableSeats;
+
 }

@@ -30,7 +30,7 @@ public class User {
     private String senha;
     private String telefone;
     private String foto;
-    
+
     @ManyToOne
     @JoinColumn(name = "id_tipo_usuario")
     private UserType userType;
@@ -38,9 +38,9 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "id_genero")
     private Gender gender;
-    
+
     @ManyToOne
     @JoinColumn(name = "id_curso")
     private Course course;
-    
+
 }

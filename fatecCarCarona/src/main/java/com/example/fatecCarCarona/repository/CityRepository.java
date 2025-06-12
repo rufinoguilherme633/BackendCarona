@@ -12,7 +12,7 @@ public interface CityRepository extends JpaRepository<City, Long>{
 
 	@Query("SELECT c FROM City c WHERE c.estado.id = ?1")
 	List<City> findByStateId(Long stateId);
-	
+
 	@Query("SELECT c FROM City c WHERE c.nome = ?1")
 	Optional<City> findByNome(String nome);
 

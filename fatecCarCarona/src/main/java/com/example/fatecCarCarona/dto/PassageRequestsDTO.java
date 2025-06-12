@@ -1,12 +1,7 @@
 package com.example.fatecCarCarona.dto;
 
-public record RideDTO(
+public record PassageRequestsDTO(
 		OriginDTO originDTO,
 		DestinationDTO destinationDTO,
-		Integer vagas_disponiveis,
-		Long id_veiculo
-) {
-
-
-
-}
+		Long id_carona
+) {}

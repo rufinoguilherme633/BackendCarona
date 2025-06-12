@@ -17,12 +17,12 @@ import com.example.fatecCarCarona.service.CityService;
 public class CityController {
 	@Autowired
 	CityService cityService;
-	
+
 	@GetMapping("/{id_estado}")
 	public ResponseEntity<List<CityDTO>> getCitiesByStateId(@PathVariable("id_estado") Long id_estado) throws Exception {
 		List<CityDTO> cities = cityService.allCitiessByStateId(id_estado);
 		return ResponseEntity.ok(cities);
 	}
-	
+
 
 }

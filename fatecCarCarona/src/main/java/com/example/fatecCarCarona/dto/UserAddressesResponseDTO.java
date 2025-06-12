@@ -6,7 +6,7 @@ public record UserAddressesResponseDTO(
 	    String logradouro,
 	    String numero,
 	    String bairro,
-	    String cep		
+	    String cep
 ) {
 
 }

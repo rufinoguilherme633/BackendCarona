@@ -8,10 +8,10 @@ import com.example.fatecCarCarona.repository.OriginRepository;
 
 @Service
 public class OriginService {
-	
+
 	@Autowired
 	OriginRepository originRepository;
-	
+
 	public Origin createOrigin(Origin origin) {
 		return originRepository.save(origin);
 	}

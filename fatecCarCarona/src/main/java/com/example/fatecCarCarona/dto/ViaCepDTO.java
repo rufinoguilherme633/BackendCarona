@@ -13,5 +13,5 @@ public record ViaCepDTO(
 		 String ibge,
 		 String gia,
 		 String ddd,
-		 String siafi		
+		 String siafi
 ) {}

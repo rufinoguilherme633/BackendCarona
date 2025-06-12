@@ -11,7 +11,7 @@ public record UserDriverDTO(
 	    Long genderId,
 	    Long courseId,
 	    UserAddressesDTO userAddressesDTO,
-	    VehicleDTO vehicleDTO		
+	    VehicleDTO vehicleDTO
 ) {
- 
+
 }

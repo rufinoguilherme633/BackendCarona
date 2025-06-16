@@ -1,64 +1,117 @@
-# Fatec Carona
+# 🛺 Fatec Carona
 
-Aplicativo web para oferecer e encontrar caronas entre alunos da FATEC.
+**Fatec Carona** é um aplicativo web desenvolvido como parte do Projeto Integrador da FATEC Cotia. O objetivo é facilitar o transporte dos alunos, permitindo que eles ofereçam ou encontrem caronas entre si, promovendo economia, praticidade e colaboração.
 
-## Tecnologias
-- Java + Spring Boot
-- JWT
-- MySql Workbanch
-- Api externas
-  - Open Street mapping
-  - ViaCep
-  - 
- # Como rodar
+---
 
- ## 1 instalar lombok 
-# **Como configurar o lombok no Eclipse**[Gustavo Furtado de Oliveira Alves](https://dicasdeprogramacao.com.br/autor/gustavo-furtado-de-oliveira-alves/)[{ Dicas de Java }](https://dicasdeprogramacao.com.br/categoria/dicas-de-java/)[2 Comentários](https://dicasdeprogramacao.com.br/como-configurar-o-lombok-no-eclipse/#disqus_thread)
+## 🎯 Objetivos
 
-Como já comentamos [**aqui**](https://dicasdeprogramacao.com.br/como-configurar-o-lombok-no-intellij-idea/), o Lombok facilita muito o desenvolvimento de códigos java, minimizando a quantidade de código necessário no seu projeto.
+O projeto tem como finalidade:
 
-O Lombok atua no processo de compilação do seu código adicionando códigos automaticamente. Tirando de você a necessidade de escrever alguns códigos como por exemplo os métodos GET, SET, hashcode, equals etc.
+- Ajudar alunos da FATEC com questões de mobilidade urbana;
+- Estimular o uso compartilhado de veículos;
+- Promover uma rede de apoio entre os estudantes da instituição.
 
-Se você usa o Eclipse como ambiente de desenvolvimento e quer usar o Lombok no seu projeto, o que você precisa fazer é ...
+---
 
-# **1. Baixar o jar do Lombok**
+## 🛠 Tecnologias Utilizadas
 
-Você pode baixar o jar do Lombok diretamente do site do Projeto Lombok, mas esse aqui é um link direto para baixar o arquivo jar do Lombok.
+- **Back-end:** Java + Spring Boot  
+- **Autenticação:** JWT (JSON Web Token)  
+- **Banco de Dados:** MySQL (MySQL Workbench)
+- **LOOMBOK**
+- **APIs Externas:**  
+  - [OpenStreetMap](https://www.openstreetmap.org/) (para mapeamento e rotas)  
+  - [ViaCEP](https://viacep.com.br/) (para consulta de endereços via CEP)  
 
-[**>> Clique AQUI para baixar o lombok.jar**](https://projectlombok.org/downloads/lombok.jar)
+> ⚠️ **Atenção:**  
+> A API do OpenStreetMap é open source e colaborativa, ou seja, os próprios usuários alimentam a base de dados.  
+> Por isso, pode acontecer de alguns endereços não serem encontrados, o que pode impactar a experiência na aplicação.
 
-# **2. Executar o jar do Lombok**
+---
 
-Para executar o Lombok basta dar "dois cliques" no arquivo ou, se você preferir, você pode usar o seguinte comando no prompt:
+## 🚀 Como Rodar o Projeto
 
-`java -jar lombok.jar`
+### 1. Instalar o Lombok
 
-![](https://dicasdeprogramacao.com.br/images/como-configurar-o-lombok-no-eclipse/executar-lombok.jar.gif)
+O projeto utiliza **Lombok** para reduzir a verbosidade do código Java. Para configurar corretamente:
 
-# **3. Selecionar o local onde está o eclipse**
+🔗 Acesse este tutorial:  
 
-Como você pode ver no gif acima, após executar o `lombok.jar`, aparece uma tela do instalador do Lombok e a primeira coisa que ele faz é scanear o seu sistema operacional para tentar encontrar "eclipses". No meu caso ele encontrou uma pasta onde tem um eclipse.
+### [Gustavo Furtado de Oliveira Alves](https://dicasdeprogramacao.com.br/autor/gustavo-furtado-de-oliveira-alves/)[{ Dicas de Java }](https://dicasdeprogramacao.com.br/categoria/dicas-de-java/)[2 Comentários](https://dicasdeprogramacao.com.br/como-configurar-o-lombok-no-eclipse/#disqus_thread)
 
-Mas se o seu eclipse não for encontrado pelo instalador do Lombok, você pode clicar em `Specify location...` e selecionar a pasta onde está o seu eclipse.
+### 2. Importar o Projeto
 
-# **4. Instalar o Lombok no eclipse**
+- Importe como projeto **Maven** na sua IDE (Eclipse, IntelliJ, etc.).
+- Certifique-se de que as dependências sejam baixadas corretamente.
 
-Com a pasta do seu eclipse selecionada (você pode selecionar mais de uma), basta clicar no botão `Install / Update`.
 
-![](https://dicasdeprogramacao.com.br/images/como-configurar-o-lombok-no-eclipse/instalar-lombok-no-eclipse.gif)
+📷 Exemplo:  
+![image](https://github.com/user-attachments/assets/5944dc98-3d21-4bb1-8218-81a351551a8c)
 
-# **5. Reiniciar o eclipse**
 
-Agora você precisa fechar (se estiver aberto) e abrir o eclipse novamente.
+- **OBS:** por causa do Lommbok pode ser necessário reiniciar a máquina para que as configurações surtam efeito.
 
-# **6. Adicionar o Lombok como dependência do seu projeto.**
+  
+### 3. Criar o Banco de Dados
 
-Por fim, você deve adicionar o jar do lombok no seu projeto. Se você estiver utilizando o maven, basta adicionar o código abaixo no bloco `<dependencies>` do seu `pom.xml`.
+- Execute o script `NovoBanco.sql`, disponível neste repositório.
 
-**`<dependency>**    **<groupId>**org.projectlombok**</groupId>**    **<artifactId>**lombok**</artifactId>**    **<version>**1.18.2**</version>**    **<scope>**provided**</scope></dependency>**`
+  
+### 4. Iniciar o Projeto
+- Após configurar o banco e o Lombok, inicie a aplicação normalmente pela classe principal do Spring Boot.
 
-# **7. Rebuild do seu projeto.**
+---
 
-Se o build não estiver automático no seu eclipse, você precisa fazer o rebuild. Atalho: `Ctrl+B`.
+### 📌 Primeiro Passo: Criar um Usuário
 
-Pronto, seu eclipse está apto a funcionar com o Lombok.
+Você pode criar usuários dos tipos **motorista** ou **passageiro**.
+
+### 🚗 Criar Motorista
+
+URL para motorista 
+Post "http://localhost:8080/users/criarMotorista"
+
+Exemplo de JSON:
+
+![image](https://github.com/user-attachments/assets/f26eb761-38aa-4ac6-b0e4-53d84fc719f8)
+
+
+url para passageiro
+
+Post "http://localhost:8080/users/criarPassageiro"
+
+Exemplo de JSON:
+
+| Exemplo de Requisição | JSON Exemplo |
+|-----------------------|--------------|
+| ![image](https://github.com/user-attachments/assets/43b01bc0-d4d2-4d7e-941b-baba80ae69f6) | {<br> "nome": "Guilherme Passageiro",<br> "sobrenome": "Rufino",<br> "email": "guilherme.rufinnoo@edxemplo.com",<br> "senha": "senhaSegura123",<br> "telefone": "(11) 91234-5678",<br> "foto": "https://example.com/foto.jpg",<br> "userTypeId": 1,<br> "genderId": 2,<br> "courseId": 3,<br> "userAddressesDTO": {<br> &nbsp;&nbsp;"cityId": 5095,<br> &nbsp;&nbsp;"logradouro": "Rua Raquel de Queiroz",<br> &nbsp;&nbsp;"numero": "123",<br> &nbsp;&nbsp;"bairro": "Santa Maria",<br> &nbsp;&nbsp;"cep": "06149-340"<br> }<br>} |
+
+
+
+### Login 
+> ⚠️ **Atenção:**  
+> nessa rota você receberá um token que será que ser usado em todas as api
+
+URL  para logar na aplicação
+Post "http://localhost:8080/users/login"
+
+Exemplo de JSON:
+
+| Exemplo de Requisição | JSON Exemplo |
+|-----------------------|--------------|
+| ![image](https://github.com/user-attachments/assets/4022930d-674d-405a-89cd-83944572d2ce) | {<br> "email": "guilherme.rufinnoo@edxemplo.com",<br> "senha": "senhaSegura123"<br>} |
+
+ 
+
+
+
+
+
+## 👨‍💻 Autores
+
+- Guilherme Rufino – [LinkedIn](linkedin.com/in/guilherme-rufino-680042269)  
+- Projeto Integrador – FATEC Cotia, 2025
+
+
+

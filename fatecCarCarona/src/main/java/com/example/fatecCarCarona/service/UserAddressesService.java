@@ -72,20 +72,19 @@ public class UserAddressesService {
 	    City city = cityService.validateCity(userAddressesDTO.cityId());
 
 	    Optional<ViaCepDTO> viaCepDTO = viaCepService.buscarCep(userAddressesDTO.cep());
-
 		if(viaCepDTO.isEmpty()) {
 	        throw new IllegalArgumentException("CEP destino não encontrado.");
 
 		}
-		boolean isValid =
-				viaCepDTO.get().localidade().equals(city.getNome()) &&
-				viaCepDTO.get().logradouro().equals(userAddressesDTO.logradouro()) &&
-				viaCepDTO.get().bairro().equals(userAddressesDTO.bairro()) ;
+		//boolean isValid =
+		//		viaCepDTO.get().localidade().equals(city.getNome()) &&
+		//		viaCepDTO.get().logradouro().equals(userAddressesDTO.logradouro()) &&
+		//		viaCepDTO.get().bairro().equals(userAddressesDTO.bairro()) ;
 
-		if(!isValid) {
-	        throw new IllegalArgumentException("Endereço não corresponde ao CEP.");
+		//if(!isValid) {
+	     //   throw new IllegalArgumentException("Endereço não corresponde ao CEP.");
 
-		}
+		//}
 	    String localString =
 	    	    userAddressesDTO.logradouro() + " " +
 	    	    city.getNome();
@@ -146,15 +145,15 @@ public class UserAddressesService {
 	        throw new IllegalArgumentException("CEP não encontrado.");
 
 		}
-		boolean isValid =
-				viaCepDTO.get().localidade().equals(city.getNome()) &&
-				viaCepDTO.get().logradouro().equals(userAddressesDTO.logradouro()) &&
-				viaCepDTO.get().bairro().equals(userAddressesDTO.bairro()) ;
+		//boolean isValid =
+		//		viaCepDTO.get().localidade().equals(city.getNome()) &&
+		//		viaCepDTO.get().logradouro().equals(userAddressesDTO.logradouro()) &&
+		//		viaCepDTO.get().bairro().equals(userAddressesDTO.bairro()) ;
 
-		if(!isValid) {
-	        throw new IllegalArgumentException("Endereço não corresponde ao CEP.");
+		//if(!isValid) {
+	     //   throw new IllegalArgumentException("Endereço não corresponde ao CEP.");
 
-		}
+		//}
 
 		addresses.setCep(city.getNome());
 		addresses.setLogradouro(userAddressesDTO.logradouro());

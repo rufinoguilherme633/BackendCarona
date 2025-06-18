@@ -80,13 +80,13 @@ public class PassageRequestsService {
 			throw new RideException("CEP não encontrado: " + cep);
 		}
 
-		boolean isValid = viaCepDTO.get().localidade().equals(cidade) &&
-						 viaCepDTO.get().logradouro().equals(logradouro) &&
-						 viaCepDTO.get().bairro().equals(bairro);
+		//boolean isValid = viaCepDTO.get().localidade().equals(cidade) &&
+		//				 viaCepDTO.get().logradouro().equals(logradouro) &&
+		//				 viaCepDTO.get().bairro().equals(bairro);
 
-		if (!isValid) {
-			throw new RideException("Endereço não corresponde ao CEP informado");
-		}
+		//if (!isValid) {
+		//	throw new RideException("Endereço não corresponde ao CEP informado");
+		//}
 	}
 	
 	private Origin criarOrigem(OriginDTO originDTO, City cidade, OpenstreetmapDTO localizacao) {
@@ -202,12 +202,13 @@ public class PassageRequestsService {
 		 
 	}
 	public Page<CompletedPassengerRequestDTO> buscarSolicitacoesConcluidas(Long userId, int page, int size) {
-	    
-	    Page<PassageRequests> paginaDeSolicitacoes = passageRequestsRepository
-	        .findPassagerConcluidas(userId, PageRequest.of(page, size));
+	    Page<PassageRequests> paginaDeSolicitacoes = passageRequestsRepository.findPassagerFinalizadas(
+	        userId,
+	        PageRequest.of(page, size)
+	    );
 
 	    if (paginaDeSolicitacoes.isEmpty()) {
-	        throw new RuntimeException("Nenhuma solicitação foi concluída");
+	        return new PageImpl<>(List.of(), PageRequest.of(page, size), 0);
 	    }
 
 	    List<CompletedPassengerRequestDTO> dtos = paginaDeSolicitacoes.getContent().stream().map(p -> {
@@ -233,11 +234,13 @@ public class PassageRequestsService {
 	            p.getId(),
 	            originDTO,
 	            destinationDTO,
-	            p.getCarona().getId()
+	            p.getCarona().getId(),
+	            p.getDataHora() // novo campo incluído
 	        );
 	    }).toList();
 
 	    return new PageImpl<>(dtos, paginaDeSolicitacoes.getPageable(), paginaDeSolicitacoes.getTotalElements());
 	}
+
 
 }

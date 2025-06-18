@@ -59,17 +59,21 @@ public class PassageRequestsController {
 
     }
 	
-	@GetMapping("/concluidas")
-	
-	public ResponseEntity<Page<CompletedPassengerRequestDTO	>> listarSolicitacoesConcluidas(
-	        @RequestHeader("Authorization") String authorizationHeader,
-	        @RequestParam(name = "page", defaultValue = "0") int page,
-	        @RequestParam(name = "size", defaultValue = "10") int size) {
-
-	    Long userId = tokenService.extractUserIdFromHeader(authorizationHeader);
-	    Page<CompletedPassengerRequestDTO> solicitacoesConcluidas = passageRequestsService.buscarSolicitacoesConcluidas(userId, page, size);
-	    
-	    return ResponseEntity.ok(solicitacoesConcluidas);
-	}
+	 @GetMapping("/concluidas") 
+	 public ResponseEntity<?> listarSolicitacoesConcluidas(@RequestHeader("Authorization") String authorizationHeader, @RequestParam(defaultValue = "0") int pagina, @RequestParam(defaultValue = "10") int itens) { 
+		 try { 
+		  	Long userId = tokenService.extractUserIdFromHeader(authorizationHeader); 
+	   		Page<CompletedPassengerRequestDTO> solicitacoesConcluidas = passageRequestsService .buscarSolicitacoesConcluidas(userId, pagina, itens); 
+	 
+	   	 if (solicitacoesConcluidas.isEmpty()) { 
+		   return ResponseEntity.noContent().build(); 
+	   	 } 
+	 
+	   	 	return ResponseEntity.ok(solicitacoesConcluidas); 
+		 } catch (Exception e) { 
+			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido ou usuário não autorizado."); 
+		 } 
+	 } 
+	 	
 
 }

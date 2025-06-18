@@ -19,7 +19,7 @@ public class OpenstreetmapService {
 	    public Optional<OpenstreetmapDTO> buscarLocal(String local) {
 	        try {
 	            String localEncoded = URLEncoder.encode(local, StandardCharsets.UTF_8);
-	            String urlString = baseUrl + localEncoded + "&format=json";
+	            String urlString = baseUrl + localEncoded + "&format=json&addressdetails=1"; 
 	            URL url = new URL(urlString);
 
 	            HttpURLConnection conexao = (HttpURLConnection) url.openConnection();

@@ -3,19 +3,27 @@ package com.example.fatecCarCarona.service;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.fatecCarCarona.dto.CompletedPassengerRequestDTO;
 import com.example.fatecCarCarona.dto.DestinationDTO;
+import com.example.fatecCarCarona.dto.DestinationResponseDTO;
 import com.example.fatecCarCarona.dto.NearbyDriversDTO;
 import com.example.fatecCarCarona.dto.OpenstreetmapDTO;
 import com.example.fatecCarCarona.dto.OriginDTO;
+import com.example.fatecCarCarona.dto.OriginResponseDTO;
 import com.example.fatecCarCarona.dto.PassageRequestsDTO;
 import com.example.fatecCarCarona.dto.PassengerSearchRequest;
+import com.example.fatecCarCarona.dto.RideResponseDTO;
 import com.example.fatecCarCarona.dto.RouteCoordinatesDTO;
 import com.example.fatecCarCarona.dto.ViaCepDTO;
 import com.example.fatecCarCarona.entity.City;
@@ -105,14 +113,12 @@ public class PassageRequestsService {
 		return destino;
 	}
 	public List<NearbyDriversDTO> findNearbyDrivers(PassengerSearchRequest passengerSearchRequest) throws Exception{
-		Optional<OpenstreetmapDTO> origem = buscarLocalizacao(passengerSearchRequest.ruaOrigem());
-		Optional<OpenstreetmapDTO> destino = buscarLocalizacao(passengerSearchRequest.ruaDestino());
-		
+
 		 List<NearbyDriversDTO> motoristasProximos = findNearbyDrivers.NearbyDriversService(new RouteCoordinatesDTO(
-				 Double.parseDouble(origem.get().lat()),
-				 Double.parseDouble(origem.get().lon()),
-				 Double.parseDouble(destino.get().lat()),
-				 Double.parseDouble(destino.get().lon())
+				 passengerSearchRequest.latitudeOrigem(),
+				 passengerSearchRequest.longitudeOrigem(),
+				 passengerSearchRequest.latitudeDestino(),
+				 passengerSearchRequest.longitudeDestino()
 				 ));
 		
 		return motoristasProximos;
@@ -195,4 +201,43 @@ public class PassageRequestsService {
 		passageRequestsRepository.save(passageRequest);
 		 
 	}
+	public Page<CompletedPassengerRequestDTO> buscarSolicitacoesConcluidas(Long userId, int page, int size) {
+	    
+	    Page<PassageRequests> paginaDeSolicitacoes = passageRequestsRepository
+	        .findPassagerConcluidas(userId, PageRequest.of(page, size));
+
+	    if (paginaDeSolicitacoes.isEmpty()) {
+	        throw new RuntimeException("Nenhuma solicitação foi concluída");
+	    }
+
+	    List<CompletedPassengerRequestDTO> dtos = paginaDeSolicitacoes.getContent().stream().map(p -> {
+	        OriginResponseDTO originDTO = new OriginResponseDTO(
+	            p.getOrigin().getId(),
+	            p.getOrigin().getCity().getNome(),
+	            p.getOrigin().getLogradouro(),
+	            p.getOrigin().getNumero(),
+	            p.getOrigin().getBairro(),
+	            p.getOrigin().getCep()
+	        );
+
+	        DestinationResponseDTO destinationDTO = new DestinationResponseDTO(
+	            p.getDestination().getId(),
+	            p.getDestination().getCity().getNome(),
+	            p.getDestination().getLogradouro(),
+	            p.getDestination().getNumero(),
+	            p.getDestination().getBairro(),
+	            p.getDestination().getCep()
+	        );
+
+	        return new CompletedPassengerRequestDTO(
+	            p.getId(),
+	            originDTO,
+	            destinationDTO,
+	            p.getCarona().getId()
+	        );
+	    }).toList();
+
+	    return new PageImpl<>(dtos, paginaDeSolicitacoes.getPageable(), paginaDeSolicitacoes.getTotalElements());
+	}
+
 }

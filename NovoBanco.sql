@@ -1,7 +1,7 @@
--- Criação do Banco de Dados
+# Criação do Banco de Dados
 CREATE DATABASE backendFateCarona;
 USE backendFateCarona;
-
+#drop database backendFateCarona;
 create table estados(
    `id_estado` BIGINT NOT NULL,
   `nome` varchar(75) DEFAULT NULL,
@@ -6060,4 +6060,4 @@ SELECT * FROM caronas_deletados;
 
  delete from usuarios where id_usuario = 1;
  select * from solicitacoes;
- 
+ select * from cidade where id_cidade = 5095;

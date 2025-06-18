@@ -211,7 +211,7 @@ public class UserService {
 		user.setUserType(userType);
 		user.setGender(gender);
 		user.setCourse(course);
-
+		user.setSenha(passwordEncoder.encode(userBaseDTO.senha()));
 		createUser(user);
 
 		return convertUserToUserBaseDto(user);

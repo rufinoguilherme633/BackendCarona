@@ -23,8 +23,8 @@ public class FindNearbyDrivers {
 	public List<NearbyDriversDTO> NearbyDriversService(RouteCoordinatesDTO routeCoordinatesDTO) throws Exception{
 
 
-		List<Ride> listRideRepository = rideRepository.findAll();
-
+		//List<Ride> listRideRepository = rideRepository.findAll();
+		List<Ride> listRideRepository = rideRepository.findAllActiveRides();
         List<Ride> motoristaProximos =new ArrayList<>();
 
         for(Ride i : listRideRepository) {

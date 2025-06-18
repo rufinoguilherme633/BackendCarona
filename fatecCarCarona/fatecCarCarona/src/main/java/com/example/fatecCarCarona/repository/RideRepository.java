@@ -35,6 +35,11 @@ public interface RideRepository extends JpaRepository<Ride, Long> {
 	List<Ride> findAtivasByDriverId(@Param("userId") Long userId);
 
 
+	@Query("SELECT r FROM Ride r WHERE r.status.nome = 'ativa'")
+	List<Ride> findAllActiveRides();
+
+	
+	
 	@Query("SELECT r FROM Ride r WHERE r.driver.id = :userId AND r.status.nome = 'concluída'")
 	Page<Ride> findConcluidasyDriverId(@Param("userId") Long userId, Pageable pageable);
 

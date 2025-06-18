@@ -18,5 +18,6 @@ public record OpenstreetmapDTO(
 	    String addresstype,
 	    String name,
 	    String display_name,
-	    List<String> boundingbox
+	    List<String> boundingbox,
+	    AddressDTO address 
 	    ) {}

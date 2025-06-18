@@ -257,8 +257,8 @@ public class RideService {
 		    throw new IllegalArgumentException("A quantidade de vagas deve ser maior que 0 e menor ou igual à quantidade de assentos disponíveis no veículo escolhido" + vehicle.getAvailableSeats() );
 		}
 
-	    validateCep(dto.destinationDTO().cep(), dto.destinationDTO().cidade(), dto.destinationDTO().logradouro(), dto.destinationDTO().bairro());
-	    validateCep(dto.originDTO().cep(), dto.originDTO().cidade(), dto.originDTO().logradouro(), dto.originDTO().bairro());
+	    //validateCep(dto.destinationDTO().cep(), dto.destinationDTO().cidade(), dto.destinationDTO().logradouro(), dto.destinationDTO().bairro());
+	    //validateCep(dto.originDTO().cep(), dto.originDTO().cidade(), dto.originDTO().logradouro(), dto.originDTO().bairro());
 
 
 

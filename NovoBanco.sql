@@ -5957,7 +5957,8 @@ INSERT INTO status_solicitacao (status_nome) VALUES
 ('pendente'),
 ('aceita'),
 ('recusada'),
-('cancelada');
+('cancelada'),
+('concluida');
 
 
 select * from cidade where nome = "Cotia";
@@ -6061,3 +6062,5 @@ SELECT * FROM caronas_deletados;
  delete from usuarios where id_usuario = 1;
  select * from solicitacoes;
  select * from cidade where id_cidade = 5095;
+ 
+ update  solicitacoes set id_status_solicitacao = 5 where id_solicitacao = 1;

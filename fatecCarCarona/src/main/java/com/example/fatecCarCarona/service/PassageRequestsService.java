@@ -113,13 +113,21 @@ public class PassageRequestsService {
 		return destino;
 	}
 	public List<NearbyDriversDTO> findNearbyDrivers(PassengerSearchRequest passengerSearchRequest) throws Exception{
-
+		Optional<OpenstreetmapDTO> origem = buscarLocalizacao(passengerSearchRequest.ruaOrigem());
+		Optional<OpenstreetmapDTO> destino = buscarLocalizacao(passengerSearchRequest.ruaDestino());
+		
 		 List<NearbyDriversDTO> motoristasProximos = findNearbyDrivers.NearbyDriversService(new RouteCoordinatesDTO(
-				 passengerSearchRequest.latitudeOrigem(),
-				 passengerSearchRequest.longitudeOrigem(),
-				 passengerSearchRequest.latitudeDestino(),
-				 passengerSearchRequest.longitudeDestino()
+				 Double.parseDouble(origem.get().lat()),
+				 Double.parseDouble(origem.get().lon()),
+				 Double.parseDouble(destino.get().lat()),
+				 Double.parseDouble(destino.get().lon())
 				 ));
+		 //List<NearbyDriversDTO> motoristasProximos = findNearbyDrivers.NearbyDriversService(new RouteCoordinatesDTO(
+		//		 passengerSearchRequest.latitudeOrigem(),
+		//		 passengerSearchRequest.longitudeOrigem(),
+		//		 passengerSearchRequest.latitudeDestino(),
+		//		 passengerSearchRequest.longitudeDestino()
+		//		 ));
 		
 		return motoristasProximos;
 		

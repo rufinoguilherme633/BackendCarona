@@ -22,7 +22,7 @@ public class OpenstreetmapController {
 	@Autowired
 	OpenstreetmapService openstreetmapService;
 
-	@PostMapping("/local")
+	@GetMapping("/local")
 	public ResponseEntity<?> buscarLocal(@RequestParam String local) {
 
 	     try { 

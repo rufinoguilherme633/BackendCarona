@@ -175,6 +175,19 @@
   |-----------------------|--------------|
   |![image](https://github.com/user-attachments/assets/700fbf9a-a99a-4b0b-8c6f-e96e90a461cf) |{ <br>  "logradouro": "Rua Tapes", <br>  "numero": "123", <br>  "bairro": "Granja Viana", <br>  "cep": "06709-035", <br>  "cityId": 4851 <br> }
 
+
+
+  CEP
+
+  URL 
+
+  http://localhost:8080/cep/{numeroCep}
+
+
+  Buscar dados da rua
+
+  http://localhost:8080/local?local={Rua z Cidade x}
+
   
   ## 👨‍💻 Autores
   

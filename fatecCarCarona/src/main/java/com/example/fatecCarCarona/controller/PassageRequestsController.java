@@ -20,6 +20,7 @@ import com.example.fatecCarCarona.dto.CompletedPassengerRequestDTO;
 import com.example.fatecCarCarona.dto.NearbyDriversDTO;
 import com.example.fatecCarCarona.dto.PassageRequestsDTO;
 import com.example.fatecCarCarona.dto.PassengerSearchRequest;
+import com.example.fatecCarCarona.dto.PendingPassengerRequestDTO;
 import com.example.fatecCarCarona.dto.RideResponseDTO;
 import com.example.fatecCarCarona.service.PassageRequestsService;
 import com.example.fatecCarCarona.service.TokenService;
@@ -74,6 +75,15 @@ public class PassageRequestsController {
 			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido ou usuário não autorizado."); 
 		 } 
 	 } 
+	 
+	 @GetMapping("/pending")
+	 public ResponseEntity<PendingPassengerRequestDTO> getPendingRequests(@RequestHeader("Authorization") String authorizationHeader) throws Exception {
+
+	     Long userId = tokenService.extractUserIdFromHeader(authorizationHeader);
+	     PendingPassengerRequestDTO pendingRequests = passageRequestsService.getPendingRequests(userId);
+	     return ResponseEntity.ok(pendingRequests);
+	 }
+
 	 	
 
 }

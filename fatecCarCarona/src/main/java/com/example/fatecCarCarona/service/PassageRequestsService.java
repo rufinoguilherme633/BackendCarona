@@ -23,6 +23,7 @@ import com.example.fatecCarCarona.dto.OriginDTO;
 import com.example.fatecCarCarona.dto.OriginResponseDTO;
 import com.example.fatecCarCarona.dto.PassageRequestsDTO;
 import com.example.fatecCarCarona.dto.PassengerSearchRequest;
+import com.example.fatecCarCarona.dto.PendingPassengerRequestDTO;
 import com.example.fatecCarCarona.dto.RideResponseDTO;
 import com.example.fatecCarCarona.dto.RouteCoordinatesDTO;
 import com.example.fatecCarCarona.dto.ViaCepDTO;
@@ -248,6 +249,41 @@ public class PassageRequestsService {
 	    }).toList();
 
 	    return new PageImpl<>(dtos, paginaDeSolicitacoes.getPageable(), paginaDeSolicitacoes.getTotalElements());
+	}
+	public PendingPassengerRequestDTO getPendingRequests(Long userId) throws Exception {
+		User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("usuario não encontrado"));
+		
+		PassageRequests passageRequests = passageRequestsRepository.findByPassagePending(userId);
+		   if (passageRequests == null) {
+		        throw new IllegalArgumentException("Nenhuma solicitação de carona pendente encontrada para este usuário.");
+		    }
+
+		
+		OriginDTO originDTO = new OriginDTO(
+		            passageRequests.getOrigin().getCity().getNome(),
+		            passageRequests.getOrigin().getLogradouro(),
+		            passageRequests.getOrigin().getNumero(),
+		            passageRequests.getOrigin().getBairro(),
+		            passageRequests.getOrigin().getCep()
+		        );
+
+		DestinationDTO destinationDTO = new DestinationDTO(
+		            passageRequests.getDestination().getCity().getNome(),
+		            passageRequests.getDestination().getLogradouro(),
+		            passageRequests.getDestination().getNumero(),
+		            passageRequests.getDestination().getBairro(),
+		            passageRequests.getDestination().getCep()
+		        );
+		
+		PendingPassengerRequestDTO pendingPassengerRequestDTO = new PendingPassengerRequestDTO(
+				passageRequests.getId(),
+				originDTO,
+				destinationDTO,
+				passageRequests.getCarona().getId(),
+				passageRequests.getStatus().getNome()
+				);
+		
+		return pendingPassengerRequestDTO;
 	}
 
 

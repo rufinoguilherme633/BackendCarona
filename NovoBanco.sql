@@ -6063,4 +6063,6 @@ SELECT * FROM caronas_deletados;
  select * from solicitacoes;
  select * from cidade where id_cidade = 5095;
  
- update  solicitacoes set id_status_solicitacao = 5 where id_solicitacao = 1;
+ update  solicitacoes set id_status_solicitacao = 1 where id_solicitacao = 1;
+ 
+ select * from solicitacoes;

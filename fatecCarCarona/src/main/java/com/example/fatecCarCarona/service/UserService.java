@@ -225,7 +225,7 @@ public class UserService {
 		try {
 			userRepository.delete(user);
 		} catch (Exception e) {
-			throw new Exception("Erro ao deletar usuario");
+			throw new Exception("Erro ao deletar usuario"+ e);
 		}
 
 	}

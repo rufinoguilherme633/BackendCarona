@@ -13,6 +13,9 @@ public interface PassageRequestsRepository extends JpaRepository<PassageRequests
 	
 	@Query("SELECT p FROM PassageRequests p WHERE p.passageiro.id = :userId AND p.status.nome IN ('aceita', 'recusada', 'cancelada', 'concluida')")
 	Page<PassageRequests> findPassagerFinalizadas(Long userId, PageRequest pageRequest);
+	
+	@Query("SELECT p FROM PassageRequests p WHERE p.passageiro.id = :userId AND p.status.nome = 'pendente'")
+	PassageRequests findByPassagePending(Long userId);
 
 
 }

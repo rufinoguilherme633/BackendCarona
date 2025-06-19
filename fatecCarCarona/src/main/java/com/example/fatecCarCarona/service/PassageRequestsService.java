@@ -277,6 +277,8 @@ public class PassageRequestsService {
 		
 		PendingPassengerRequestDTO pendingPassengerRequestDTO = new PendingPassengerRequestDTO(
 				passageRequests.getId(),
+				passageRequests.getCarona().getDriver().getNome(),
+				passageRequests.getCarona().getDriver().getFoto(),
 				originDTO,
 				destinationDTO,
 				passageRequests.getCarona().getId(),

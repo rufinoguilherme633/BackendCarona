@@ -279,6 +279,7 @@ public class PassageRequestsService {
 				passageRequests.getId(),
 				passageRequests.getCarona().getDriver().getNome(),
 				passageRequests.getCarona().getDriver().getFoto(),
+				passageRequests.getCarona().getDriver().getCourse().getName(),
 				originDTO,
 				destinationDTO,
 				passageRequests.getCarona().getId(),

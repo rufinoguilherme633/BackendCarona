@@ -29,7 +29,7 @@
   > Por isso, pode acontecer de alguns endereços não serem encontrados, o que pode impactar a experiência na aplicação.
   
   ---
-  
+
   ## 🚀 Como Rodar o Projeto
   
   ### 1. Instalar o Lombok
@@ -53,16 +53,27 @@
   - **OBS:** por causa do Lommbok pode ser necessário reiniciar a máquina para que as configurações surtam efeito.
   
     
-  ### 3. Criar o Banco de Dados
-  
-  - Execute o script `NovoBanco.sql`, disponível neste repositório.
-  
-    
-  ### 4. Iniciar o Projeto
-  - Após configurar o banco e o Lombok, inicie a aplicação normalmente pela classe principal do Spring Boot.
-  
-  ---
-  
+### 3. Configurar o Banco de Dados
+
+- Execute o script `NovoBanco.sql`, disponível neste repositório, para criar o banco de dados.
+- **Observação:** Este projeto utiliza **MySQL** e foi desenvolvido utilizando o **MySQL Workbench**.
+  - Para que a aplicação funcione corretamente, configure a senha do seu banco de dados no arquivo `application.properties` do projeto Java.
+
+### 4. Iniciar o Projeto
+
+- Com o banco de dados configurado e o **Lombok** instalado, inicie a aplicação pela **classe principal do Spring Boot**.
+
+---
+
+## Acessar a Documentação da API
+
+Após a aplicação ser iniciada corretamente, acesse a documentação da API através do Swagger no seguinte endereço:
+
+[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+
+
+
+  # a seguir json que foram testados
   ### 📌 Primeiro Passo: Criar um Usuário
   
   Você pode criar usuários dos tipos **motorista** ou **passageiro**.

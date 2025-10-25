@@ -1,0 +1,260 @@
+{
+
+    "openapi":"3.0.0",
+    "info":{
+        "title":"API anunciantes FATEC carona",
+        "version":"1.0.0"   
+    },
+    "servers":[
+        {"url":"http://localhost:8081"}
+    ],
+
+
+    "paths":{
+        "/anuncio":{
+            "post":{
+                "summary":"Cadastro de anunciante",
+                "description":"rota responsavel por fazer o cadastro dos anunciantes",
+                "tags":["Anunciante"],
+                "requestBody":{
+                    "content":{
+                            "application/json":{
+                                "schema":{
+                                    "$ref":"#/components/schemas/Anunciante"
+                                },
+                                "example":{
+                                    
+                                            "nome_dono": "Atualizar 1",
+                                            "logo":"logo.png",
+                                            "razao_social": "Souza Comércio de Informática LTDA",
+                                            "nome_fantasia": "Souza Tech",
+                                            "cnpj": "12.345.678/0001-99",
+                                            "ramo_empresa": "Informática",
+                                            "descricao_anuncio": "Venda e manutenção de computadores e acessórios",
+                                            "endereço_empresa": "Av. Paulista, 1500, São Paulo, SP",
+                                            "endereço_dono": "Rua das Flores, 200, São Paulo, SP",
+                                            "contato": "(11) 98765-4321",
+                                            "email": "contato@souza-tech.coms",
+                                            "senha": "SenhaSegura123!",
+                                            "anuncio": "Promoção de manutenção de computadores com 20% de desconto este mês",
+                                            "quantidade_alcance":20
+                                    
+                                }
+                            }
+                    }
+                },
+                "responses":{
+                    "400":{
+                        "description":"dado não pode ser vazio"
+                    },
+
+                    "200":{
+                        "description":"OK",
+                        "content":{
+                            "application/json":{
+                               "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Criado com sucesso"
+                                        }
+                                    }
+                               }
+                            }
+                        }
+                    }
+                }
+            }, 
+             "put":{
+                "summary":"atualizacao de dados de anunciante",
+                "description":"rota responsavel por fazer o atualizacao dos anunciantes",
+                "tags":["Anunciante"],
+                "security":[
+                   {
+                       "bearerAuth":[]
+                   }
+                ],
+                "requestBody":{
+                    "content":{
+                            "application/json":{
+                                "schema":{
+                                    "$ref":"#/components/schemas/Anunciante"
+                                },
+                                "example":{
+                                    
+                                            "nome_dono": "Atualizar 1",
+                                            "logo":"logo.png",
+                                            "razao_social": "Souza Comércio de Informática LTDA",
+                                            "nome_fantasia": "Souza Tech",
+                                            "cnpj": "12.345.678/0001-99",
+                                            "ramo_empresa": "Informática",
+                                            "descricao_anuncio": "Venda e manutenção de computadores e acessórios",
+                                            "endereço_empresa": "Av. Paulista, 1500, São Paulo, SP",
+                                            "endereço_dono": "Rua das Flores, 200, São Paulo, SP",
+                                            "contato": "(11) 98765-4321",
+                                            "email": "contato@souza-tech.coms",
+                                            "senha": "SenhaSegura123!",
+                                            "anuncio": "Promoção de manutenção de computadores com 20% de desconto este mês",
+                                            "quantidade_alcance":20
+                                    
+                                }
+                            }
+                    }
+                },
+                "responses":{
+                    "400":{
+                        "description":"dado não pode ser vazio"
+                    },
+
+                    "200":{
+                        "description":"OK",
+                        "content":{
+                            "application/json":{
+                               "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "message": {
+                                            "type": "string",
+                                            "example": "atualizado com sucesso"
+                                        }
+                                    }
+                               }
+                            }
+                        }
+                    }
+                }
+               
+
+            }
+        },
+        "/anuncio/login":{
+            "post":{
+                "summary":"Login do anunciante",
+                "description":"rota responsavel por login do usuario anunciante",
+                "tags":["login"],
+                "requestBody":{
+                    "content":{
+                           "application/json":{
+                                "schema":{
+                                     "$ref":"#/components/schemas/login"
+                                },
+                                "example":{
+
+                                    "email": "contato@souza-tech.coms",
+                                    "senha": "SenhaSegura123!"
+
+                                }
+
+                           }
+                    }
+                },
+                "responses":{
+
+                    "400":{
+                        "description":"dado não pode ser vazio"
+                    },
+                    "200":{
+                        "description":"OK",
+                        "content":{
+                            "application/json":{
+                               "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        "message": {
+                                            "type": "string",
+                                            "token": "dsfsdfdsfsd"
+                                        }
+                                    }
+                               }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+       
+    },
+
+    "components":{
+        "schemas":{
+            "Anunciante":{
+                "type":"object",
+                "properties":{
+                    "nome_dono":{
+                        "type": "string"
+        
+                    },
+                    "logo":{
+                        "type": "string"
+                    
+                    },
+                    "razao_social":{
+                        "type":"string"
+                    
+                    },
+                    "nome_fantasia":{
+                        "type":"string"
+                    }, 
+                    "cnpj":{
+                        "type":"string"
+                    
+                    },
+                    "ramo_empresa":{
+                        "type":"string"
+                        
+                    },
+                    "descricao_anuncio":{
+                        "type":"string"
+                    },
+                    "endereço_empresa":{
+                        "type":"string"
+                    
+                    },
+                    "endereço_dono":{
+                        "type":"string"
+                    
+                    },
+                    "contato":{
+                        "type":"string"
+                    },
+                    "email":{
+                        "type":"string"
+                    
+                    },
+                    "senha":{
+                        "type":"string"
+                        
+                    },
+                    "anuncio":{
+                        "type":"string"
+                    
+                    },
+                    "quantidade_alcance":{
+                        "type":"number"
+                    
+                    }
+                }
+            },
+            "login":{
+                "type":"object",
+                "properties":{
+                    "email":{
+                        "type": "string"
+                    },
+                    "senha":{
+                        "type": "string"
+                    }
+                }
+             }
+        },
+        "securitySchemes":{
+            "bearerAuth":{
+                "type":"http",
+                "scheme":"bearer",
+                "bearerFormat":"JWT"
+            }
+        }
+    }
+}

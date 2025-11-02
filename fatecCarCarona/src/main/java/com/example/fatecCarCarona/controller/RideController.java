@@ -1,6 +1,7 @@
 package com.example.fatecCarCarona.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.service.annotation.PutExchange;
 
+import com.example.fatecCarCarona.dto.RequestsForMyRideDTO;
 import com.example.fatecCarCarona.dto.RideDTO;
 import com.example.fatecCarCarona.dto.RideResponseDTO;
+import com.example.fatecCarCarona.entity.PassageRequests;
 import com.example.fatecCarCarona.service.RideService;
 import com.example.fatecCarCarona.service.TokenService;
 
@@ -75,6 +79,30 @@ public class RideController {
 
 	    		RideDTO ride = rideService.atualizarDriverRotas(idLong, rideDTO, rideId);
 	            return ResponseEntity.ok(ride);
+
+	    }
+	    
+	    @GetMapping("/requestsForMyRide")
+	    public ResponseEntity<List<RequestsForMyRideDTO>>requestsForMyRide(@RequestHeader("Authorization") String authHeader){
+	    	Long driverId = tokenService.extractUserIdFromHeader(authHeader);
+	    	System.out.println("Driver ID extraído: " + driverId);
+			List<RequestsForMyRideDTO> requestsForMyRide = rideService.requestsForMyRide(driverId);
+			return  ResponseEntity.ok(requestsForMyRide);
+	    	
+	    
+	    }
+	    
+	    @PutMapping("/{idSolicitacao}/acept")
+	    public ResponseEntity<Map<String, String>> aceitarSolicitacao(
+	    		@PathVariable Long idSolicitacao,
+	            @RequestHeader("Authorization") String authHeader,
+	            @RequestBody AceitarSolicitacaoDTO idCarona) {	    	
+	    	Long driverId = tokenService.extractUserIdFromHeader(authHeader);
+	    	System.out.println("Driver ID extraído: " + driverId);
+
+	    	
+	        rideService.aceitarSolicitacao(idSolicitacao, driverId, idCarona.idCarona());
+	        return ResponseEntity.ok(Map.of("message", "Solicitação aceita com sucesso"));
 
 	    }
 	}

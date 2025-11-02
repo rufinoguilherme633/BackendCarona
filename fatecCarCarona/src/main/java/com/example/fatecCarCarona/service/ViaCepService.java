@@ -6,7 +6,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.fatecCarCarona.dto.ViaCepDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +28,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 			HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
 	        conexao.setRequestMethod("GET");
 	        if (conexao.getResponseCode() != 200) {
-	        	return Optional.empty();
+	        	throw new ResponseStatusException(HttpStatus.NOT_FOUND, "CEP não encontrado: " + cep);
+	        	//return Optional.empty();
 	        }
 
 
@@ -46,7 +49,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
             return Optional.ofNullable(resultado);
 
         } catch (Exception e) {
-        	throw new RuntimeException("Erro ao buscar endereço: " + e.getMessage(), e);
+        	//throw new RuntimeException("Erro ao buscar endereço: " + e.getMessage(), e);
+        	
+        	throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Erro ao buscar endereço: " + e.getMessage(), e);
         }
     }
 

@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.fatecCarCarona.dto.CompletedPassengerRequestDTO;
 import com.example.fatecCarCarona.dto.DestinationDTO;
@@ -34,11 +36,12 @@ import com.example.fatecCarCarona.entity.PassageRequests;
 import com.example.fatecCarCarona.entity.PassageRequestsStatusRepository;
 import com.example.fatecCarCarona.entity.Ride;
 import com.example.fatecCarCarona.entity.User;
-import com.example.fatecCarCarona.exception.RideException;
+
 import com.example.fatecCarCarona.repository.PassageRequestsRepository;
 import com.example.fatecCarCarona.repository.RideRepository;
 import com.example.fatecCarCarona.repository.UserRepository;
 
+//import com.example.fatecCarCarona.exception.RideException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -78,7 +81,8 @@ public class PassageRequestsService {
 		Optional<ViaCepDTO> viaCepDTO = viaCepService.buscarCep(cep);
 
 		if (viaCepDTO.isEmpty()) {
-			throw new RideException("CEP não encontrado: " + cep);
+			//throw new RideException("CEP não encontrado: " + cep);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,"CEP não encontrado: " + cep);
 		}
 
 		//boolean isValid = viaCepDTO.get().localidade().equals(cidade) &&
@@ -151,6 +155,7 @@ public class PassageRequestsService {
 					   passageRequests.destinationDTO().logradouro(), passageRequests.destinationDTO().bairro());
 	
 		City cidadeOrigem = cityService.validateCity(passageRequests.originDTO().cidade());
+		
 		City cidadeDestino = cityService.validateCity(passageRequests.destinationDTO().cidade());
 	
 		String enderecoOrigem = String.format("%s %s", passageRequests.originDTO().logradouro(), cidadeOrigem.getNome());
@@ -202,9 +207,7 @@ public class PassageRequestsService {
 	
 	public void cancelar(Long userId, Long id_solicitacao) {
 		PassageRequests passageRequest = passageRequestsRepository.findById(id_solicitacao).orElseThrow(() -> new RuntimeException("nenhuma solicitação encontrada"));
-		if(!userId.equals(passageRequest.getPassageiro().getId())) {
-			new Exception("Essa solicitação não pertence a esse usuario");
-		}
+		
 		
 		passageRequest.setStatus(passageRequestsStatusService.findByNome("cancelada"));
 		passageRequestsRepository.save(passageRequest);

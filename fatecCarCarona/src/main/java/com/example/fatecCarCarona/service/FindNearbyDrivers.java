@@ -32,7 +32,7 @@ public class FindNearbyDrivers {
         	if(i.getAvailableSeats() > 0) {
             	double distanciaOrigem = this.calcularDistancia(routeCoordinatesDTO.latitudeOrigem(), routeCoordinatesDTO.longitudeOrigem(),i.getOrigin().getLatitude(), i.getOrigin().getLongitude());
             	double distanciaDestino = this.calcularDistancia(routeCoordinatesDTO.latitudeDestino(), routeCoordinatesDTO.longitudeDestino(),i.getDestination().getLatitude(), i.getDestination().getLongitude());
-            	if(distanciaOrigem < 9.000000  &&  distanciaDestino < 0.3000000000000000) {
+            	if(distanciaOrigem < 9.000000  &&  distanciaDestino <1.000000000000000) {
     				motoristaProximos.add(i);
     			}
         	}

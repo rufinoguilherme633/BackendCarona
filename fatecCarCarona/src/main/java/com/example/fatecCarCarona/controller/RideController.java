@@ -72,7 +72,7 @@ public class RideController {
 
 	    }
 
-	    @PutExchange("/{rideId}")
+	    @PutMapping("/{rideId}")
 	    public ResponseEntity<RideDTO> atualizarDriverRotas(@RequestHeader("Authorization") String authHeader, @PathVariable Long rideId, @RequestBody RideDTO rideDTO) throws Exception {
 
 	    		Long idLong = tokenService.extractUserIdFromHeader(authHeader);
@@ -105,5 +105,19 @@ public class RideController {
 	        return ResponseEntity.ok(Map.of("message", "Solicitação aceita com sucesso"));
 
 	    }
-	}
+
+	    @PutMapping("/finalizar/{rideId}")
+	    public ResponseEntity<Map<String, String>> finalizarCarona(
+	            @PathVariable Long rideId,
+	            @RequestHeader("Authorization") String authHeader) {
+	        
+	        Long driverId = tokenService.extractUserIdFromHeader(authHeader);
+	        rideService.finalizarCarona(rideId, driverId);
+	        
+	        return ResponseEntity.ok(Map.of("message", "Carona finalizada com sucesso"));
+	    }
+
+
+}
+
 

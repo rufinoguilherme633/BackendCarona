@@ -577,7 +577,8 @@ public class RideService {
 		List<PassageRequests> existRequest = passageRequestsRepository.requestsForMyRide(driverId);
 		
 		if(existRequest.isEmpty()) {
-			throw new ResponseStatusException (HttpStatus.NOT_FOUND,"nenhuma solicitacao para essa carona");
+		//	throw new ResponseStatusException (HttpStatus.NOT_FOUND,"nenhuma solicitacao para essa carona");
+			 return new ArrayList<>();
 				
 		}
 		
@@ -661,5 +662,47 @@ public class RideService {
 		    
 		    
 	}
+	
+	@Transactional(rollbackOn = Exception.class)
+	public void finalizarCarona(Long rideId, Long driverId) {
+	    // 1. Buscar e validar usuário
+	    User user = userRepository.findById(driverId)
+	        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+
+	    // 2. Buscar carona
+	    Ride ride = rideRepository.findById(rideId)
+	        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Carona não encontrada"));
+
+	    // 3. Verificar se o usuário é o motorista da carona
+	    if (!ride.getDriver().getId().equals(user.getId())) {
+	        throw new SecurityException("Esta carona não pertence a este motorista.");
+	    }
+
+	    // 4. Verificar se carona já está finalizada ou cancelada
+	    if (ride.getStatus().getNome().equalsIgnoreCase("cancelada") ||
+	        ride.getStatus().getNome().equalsIgnoreCase("concluída")) {
+	        throw new IllegalStateException("Esta carona já foi finalizada ou cancelada.");
+	    }
+
+	    // 5. Atualizar status da carona para CONCLUÍDA
+	    RideStatus statusConcluida = rideStatusRepository.findByNome("concluída");
+	    ride.setStatus(statusConcluida);
+	    rideRepository.save(ride);
+
+	    // 6. Atualizar todas as solicitações ACEITAS para CONCLUÍDA
+	    List<PassageRequests> solicitacoesAceitas = passageRequestsRepository
+	        .findByCaronaIdAndStatusAceita(rideId); // ← Passa apenas o ID da carona
+
+	    if (!solicitacoesAceitas.isEmpty()) {
+	        for (PassageRequests solicitacao : solicitacoesAceitas) {
+	            solicitacao.setStatus(passageRequestsStatusService.findByNome("concluída"));
+	            passageRequestsRepository.save(solicitacao);
+	        }
+	        System.out.println("✅ Atualizadas " + solicitacoesAceitas.size() + " solicitações para CONCLUÍDA");
+	    }
+
+	    System.out.println("✅ Carona ID " + rideId + " finalizada com sucesso pelo motorista ID " + driverId);
+	}
+
 
 }

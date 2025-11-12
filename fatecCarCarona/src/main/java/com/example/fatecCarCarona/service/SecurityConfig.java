@@ -58,7 +58,11 @@ public class SecurityConfig {
 	                    "/swagger-ui/**",
 	                    "/swagger-ui.html"
 	                ).permitAll()
+				.requestMatchers(HttpMethod.GET, "/users").authenticated()
+	            .requestMatchers(HttpMethod.PUT, "/users").authenticated()
+	            .requestMatchers(HttpMethod.DELETE, "/users").authenticated()
 				.anyRequest().authenticated()
+				
 			)
 			
 			.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
@@ -78,7 +82,7 @@ public class SecurityConfig {
 	@Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000")); 
+        config.setAllowedOrigins(List.of("http://localhost:3000","http://localhost:3001")); 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true); // permite cookies e headers como Authorization

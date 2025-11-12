@@ -247,7 +247,20 @@ public class PassageRequestsService {
 	            originDTO,
 	            destinationDTO,
 	            p.getCarona().getId(),
-	            p.getDataHora() // novo campo incluído
+	            p.getDataHora(), // novo campo incluído
+	            p.getStatus().getNome(),        // ✅ ADICIONAR: ex: "ACEITO", "PENDENTE", etc
+	            p.getStatus().getId(),           // ✅ ADICIONAR: ex: 2L para ACEITO
+	         // ✅ ADICIONAR: Dados do motorista
+	            p.getCarona().getDriver().getNome(),
+	            p.getCarona().getDriver().getFoto(),
+	            p.getCarona().getDriver().getCourse().getName(),
+	            
+	            // ✅ ADICIONAR: Dados do veículo
+	            p.getCarona().getVehicle().getModelo(),
+	            p.getCarona().getVehicle().getMarca(),
+	            p.getCarona().getVehicle().getPlaca(),
+	            p.getCarona().getVehicle().getCor()
+
 	        );
 	    }).toList();
 

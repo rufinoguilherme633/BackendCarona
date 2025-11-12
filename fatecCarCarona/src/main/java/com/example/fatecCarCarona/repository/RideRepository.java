@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.example.fatecCarCarona.entity.CaronaDetalhadaProjection;
+import com.example.fatecCarCarona.entity.PassageRequests;
 import com.example.fatecCarCarona.entity.Ride;
 
 public interface RideRepository extends JpaRepository<Ride, Long> {

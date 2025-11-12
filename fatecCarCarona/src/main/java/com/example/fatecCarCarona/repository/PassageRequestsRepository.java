@@ -23,11 +23,16 @@ public interface PassageRequestsRepository extends JpaRepository<PassageRequests
 	@Query("""
 		    SELECT p FROM PassageRequests p 
 		    JOIN p.carona c 
-		    WHERE p.status.id = 1
+		    WHERE p.status.id IN (1, 2)
 		      AND c.status.id = 1
 		      AND c.driver.id = :driverId
+
 		""")
 		List<PassageRequests> requestsForMyRide(Long driverId);
+	
+	@Query("SELECT p FROM PassageRequests p WHERE p.carona.id = :caronaId AND p.status.nome = 'aceita'")
+	List<PassageRequests> findByCaronaIdAndStatusAceita(Long caronaId);
+
 
 
 }

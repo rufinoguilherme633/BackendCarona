@@ -3,8 +3,6 @@ const User = require("../models/mysqlmodels/User")
 
 
 const findAllUser = async ()=>{
-
-
     try {
         const users =await User.findAll();
         return users
@@ -18,8 +16,6 @@ const findAllUser = async ()=>{
 
 
 const findById = async (id)=>{
-
-   
     try {
         
         const users =await User.findOne({where:  {id_usuario:id}});

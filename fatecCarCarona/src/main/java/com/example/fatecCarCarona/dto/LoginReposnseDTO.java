@@ -1,5 +1,5 @@
 package com.example.fatecCarCarona.dto;
 
-public record LoginReposnseDTO(String name ,String token) {
+public record LoginReposnseDTO(String name ,String token, Long id,Long userTypeId) {
 
 }

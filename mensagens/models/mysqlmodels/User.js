@@ -9,6 +9,7 @@ const User = sequelize.define(
       type: Sequelize.BIGINT,
       primaryKey: true,
       autoIncrement: true,
+      field: "id_usuario"
     },
     nome: {
       type: Sequelize.STRING,
